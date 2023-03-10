@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Flat's Wikipedia Browser</title>
+   <style>#searchBox {
+  width: 400px;
+  font-size: 18px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+#results {
+  margin-top: 20px;
+}
+
+#results div {
+  margin-bottom: 10px;
+}
+
+#results a {
+  font-size: 18px;
+}
+    </style>
+   <script>function search() {
+  // Get the search term from the search box
+  var searchTerm = document.getElementById("searchBox").value;
+
+  // Construct the URL for the Wikipedia API
+  var url = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + encodeURIComponent(searchTerm) + "&format=json&callback=displayResults";
+
+  // Make a JSONP request to the Wikipedia API
+  var script = document.createElement("script");
+  script.src = url;
+  document.head.appendChild(script);
+}
+
+function displayResults(data) {
+  // Get the results div
+  var resultsDiv = document.getElementById("results");
+
+  // Clear any previous results
+  resultsDiv.innerHTML = "";
+
+  // Display each result as a link
+  for (var i = 0; i < data[1].length; i++) {
+    var title = data[1][i];
+    var link = data[3][i];
+    var resultDiv = document.createElement("div");
+    var resultLink = document.createElement("a");
+    resultLink.href = link;
+    resultLink.textContent = title;
+    resultDiv.appendChild(resultLink);
+    resultsDiv.appendChild(resultDiv);
+  }
+}
+    </script>
+</head>
+<body>
+  <h1>flat's Wikipedia Browser</h1>
+  <input type="text" id="searchBox" placeholder="Enter search term">
+  <button onclick="search()">Search</button>
+  <div id="results"></div>
+</body>
+</html>
